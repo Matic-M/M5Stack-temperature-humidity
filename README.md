@@ -14,7 +14,7 @@ This project uses an M5Stack to take temperature and humidity readings, upload t
 ## Components
 
 - M5Stack Core
-- DHT11 or DHT22 Sensor
+- SHT30 Sensor
 - Relay Module
 - USB Cable
 - Wi-Fi connection
