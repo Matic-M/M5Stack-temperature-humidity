@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="stylesheet" href="css/cssIOT.css">
+        <title>IoT</title>
+
+        <script type="text/javascript">
+                // event occurs - create XMLHttpRequest object      
+                let xhr = new XMLHttpRequest();
+
+
+                let jsonResponse = "";
+                xhr.responseType = "";
+
+                xhr.onreadystatechange = () => {
+
+                        // page is loaded and button is clicked
+                        if (xhr.status == 200 && xhr.readyState == 4) {
+                                jsonResponse = JSON.parse(xhr.responseText);
+                                let temperatura = jsonResponse.feeds[0].field1;
+                                console.log(temperatura);
+                                let vlaga = jsonResponse.feeds[0].field2;
+                                console.log(vlaga);
+                                document.getElementById("temperatura").innerText = temperatura;
+                                document.getElementById("vlaga").innerText = vlaga;
+                        }
+                };
+
+                // JSON API
+                let url = "https://api.thingspeak.com/channels/2329291/feeds.json?api_key=KFZZNTR3Z957ALL6&results=2";
+
+                // create GET http request
+                xhr.open('GET', url);
+                // send request to server - Thingspeak
+                xhr.send();
+
+                ///// FUNCTIONS //////
+                function OPEN() {
+                        let xhr = new XMLHttpRequest();
+                        const url = "https://api.thingspeak.com/update?api_key=C2O971A1LP0NXW2Z&field5=1"; 
+
+                        xhr.open('GET', url, true);
+                        // page is loaded and button is clicked
+                        xhr.onreadystatechange = function () {
+                                if (xhr.status == 200 && xhr.readyState == 4) {
+                                        console.log('Manaully window opened successfully.');
+                                }
+                        };
+                        xhr.send();
+
+
+                }
+                
+                function AUTO() {
+                        let xhr = new XMLHttpRequest();
+                        const url = "https://api.thingspeak.com/update?api_key=C2O971A1LP0NXW2Z&field5=0";
+
+                        xhr.open('GET', url, true);
+                        // page is loaded and button is clicked
+                        xhr.onreadystatechange = function () {
+                                if (xhr.status == 200 && xhr.readyState == 4) {
+
+                                        console.log('Automatically operating window.');
+                                }
+                        };
+                        xhr.send();
+
+
+                } 
+                
+
+                function maxTemp() {
+                        const maxTemp = document.getElementById("maxTemp").value;
+                        let xhr = new XMLHttpRequest();
+                        const url = "https://api.thingspeak.com/update?api_key=C2O971A1LP0NXW2Z&field3=" + maxTemp;
+
+                        xhr.open('GET', url, true);
+                        // page is loaded and button is clicked
+                        xhr.onreadystatechange = function () {
+                                if (xhr.status == 200 && xhr.readyState == 4) {
+
+                                        console.log('Maximum temperature set successfully.');
+                                }
+                        };
+                        xhr.send();
+
+
+                }
+
+                function maxHumid() {
+                        const maxHumid = document.getElementById("maxHumid").value;
+                        let xhr = new XMLHttpRequest();
+                        const url = "https://api.thingspeak.com/update?api_key=C2O971A1LP0NXW2Z&field4=" + maxHumid;
+
+                        xhr.open('GET', url, true);
+                        // page is loaded and button is clicked
+                        xhr.onreadystatechange = function () {
+                                if (xhr.status == 200 && xhr.readyState == 4) {
+
+                                        console.log('Maximum humidity set successfully.');
+                                }
+                        };
+                        xhr.send();
+
+                }
+
+                /*refresh website every 30 seconds*/
+                setTimeout(function () {
+                        window.location.reload(1);
+                }, 30000);
+        </script>
+</head>
+
+<body>
+        <!--current state-->
+        <h2><strong>CURRENT TEMPERATURE: </strong>
+                <span id=temperatura></span>
+        </h2>
+        <h2><strong>CURRENT HUMIDITY: </strong>
+                <span id=vlaga></span>
+        </h2>
+
+        <h3>WINDOW</h3>
+        <div class="container">
+                <button id="OPEN" onclick="OPEN()">MANUAL OPEN</button>
+                <button id="AUTO" onclick="AUTO()">AUTO</button>
+        </div>
+
+        <h4>highest temperature</h4>
+        <div class="container">highest temperature
+                <input type="text" id="maxTemp" name="maxTemp">
+                <button onclick="maxTemp()">Set</button>
+        </div>
+        <h4>highest humidity</h4>
+        <div class="container">highest humidity
+                <input type="text" id="maxHumid" name="maxHumid">
+                <button onclick="maxHumid()">Set</button>
+        </div>
+        <div class="container">
+                <iframe width="450" height="260" style="border: 1px solid #cccccc;"
+                        src="https://thingspeak.com/channels/2329291/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15&api_key=KFZZNTR3Z957ALL6"></iframe>
+
+        </div>
+
+        <div class="container">
+                <iframe width="450" height="260" style="border: 1px solid #cccccc;"
+                        src="https://thingspeak.com/channels/2329291/charts/2?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15&api_key=KFZZNTR3Z957ALL6"></iframe>
+        </div>
+
+</body>
+
+</html>
